@@ -1,0 +1,62 @@
+from collections import defaultdict
+
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left =None
+        self.right = None
+
+#build Graph from the given tree
+def get_graph(root, graph):
+    if not root:
+        return
+    if root.left:
+        graph[root.val].append(root.left.val)
+        graph[root.left.val].append(root.val)
+        
+    if root.right:
+        graph[root.val].append(root.right.val)
+        graph[root.right.val].append(root.val)
+        
+    self.get_graph(root.left, graph)
+    self.get_graph(root.right, graph)
+
+#Apply BFS from given node to capture node at distance K
+def BFS(graph,target_node,K):
+    if not graph:
+        return []
+    visited = [False for i in range(max(graph.keys())+1)]
+    q = [target_node.val]
+    visited[target_node.val] = True
+    level = 0
+    flag = False
+    while(q):
+        count = len(q)
+        if level == K:
+            flag = True
+            bfs = []
+            
+        while(count):
+            node = q.pop(0)
+            if flag:
+                bfs.append(node)
+            for n in graph[node]:
+                if visited[n]==False:
+                    q.append(n)
+                    visited[n] = True
+            count-=1
+        if flag:
+            return bfs
+        level+=1
+            
+    return []
+
+# final function for execution
+def distanceK(root: TreeNode, target: TreeNode, K: int) -> List[int]:
+    graph = defaultdict(list)
+    get_graph(root,graph)
+    bfs = BFS(graph,target,K)
+    for node in bfs:
+    print(node, end = " ")
+    
